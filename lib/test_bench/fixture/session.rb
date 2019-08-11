@@ -35,6 +35,11 @@ module TestBench
       attr_writer :finished
       alias_method :finished?, :finished
 
+      def error_policy
+        @error_policy ||= ErrorPolicy::Build.(:rescue_assert)
+      end
+      attr_writer :error_policy
+
       def output
         @output ||= Output::Substitute.build
       end
@@ -70,6 +75,14 @@ module TestBench
 
       def detail(text)
         output.detail(text)
+      end
+
+      def error(error)
+        fail!
+
+        output.error(error)
+
+        error_policy.(error)
       end
 
       def fail!
