@@ -6,6 +6,12 @@ module TestBench
           abort "TestBench is aborting (#{self.class})"
         end
       end
+
+      class Raise
+        def call(error)
+          raise error
+        end
+      end
     end
   end
 end
