@@ -7,6 +7,47 @@ module TestBench
         end
 
         class Output < Capture
+          alias_method :raw_records, :records
+
+          def records(*contexts, &block)
+            if contexts.empty? && block.nil?
+              return raw_records
+            end
+
+            match_records(*contexts, &block)
+          end
+
+          def match_records(*contexts, &block)
+            block ||= proc { true }
+
+            raw_records.select do |record|
+              context_iterator = record.context.to_enum
+
+              contexts_match = contexts.all? do |context|
+                until context_iterator.peek == context
+                  context_iterator.next
+                end
+                true
+
+              rescue StopIteration
+                false
+              end
+
+              contexts_match &&
+                block.(record.signal, *record.data, record.context)
+            end
+          end
+
+          Fixture::Output.signals.each do |signal|
+            signal_records_method = :"#{signal}_records" # e.g. comment_records
+            define_method(signal_records_method) do |*contexts, &block|
+              match_records(*contexts) do |recorded_signal, *data|
+                if recorded_signal == signal
+                  block.nil? || block.(*data)
+                end
+              end
+            end
+          end
         end
       end
     end
