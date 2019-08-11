@@ -64,6 +64,10 @@ module TestBench
         result
       end
 
+      def comment(text)
+        output.comment(text)
+      end
+
       def fail!
         self.assertion_counter += 1
         self.error_counter += 1
