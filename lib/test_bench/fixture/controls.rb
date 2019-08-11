@@ -10,3 +10,4 @@ require 'test_bench/fixture/controls/result'
 require 'test_bench/fixture/controls/test_file'
 
 require 'test_bench/fixture/controls/output'
+require 'test_bench/fixture/controls/output/log'
