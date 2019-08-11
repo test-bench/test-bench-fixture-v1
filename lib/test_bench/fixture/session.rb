@@ -53,6 +53,10 @@ module TestBench
         result
       end
 
+      def comment(text)
+        output.comment(text)
+      end
+
       def fail!
         self.error_counter += 1
       end
