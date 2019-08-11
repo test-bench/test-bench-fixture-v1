@@ -11,6 +11,12 @@ module TestBench
         class Output < Capture
           alias_method :raw_records, :records
 
+          def recorded?(*contexts, &block)
+            records = match_records(*contexts, &block)
+
+            records.any?
+          end
+
           def one_record(*contexts, &block)
             matching_records = match_records(*contexts, &block)
 
@@ -65,6 +71,15 @@ module TestBench
             one_signal_method = :"one_#{signal}_record" # e.g. one_comment_record
             define_method(one_signal_method) do |*contexts, &block|
               one_record(*contexts) do |recorded_signal, *data|
+                if recorded_signal == signal
+                  block.nil? || block.(*data)
+                end
+              end
+            end
+
+            signal_recorded_method = :"#{signal}_recorded?" # e.g. comment_recorded?
+            define_method(signal_recorded_method) do |*contexts, &block|
+              recorded?(*contexts) do |recorded_signal, *data|
                 if recorded_signal == signal
                   block.nil? || block.(*data)
                 end
