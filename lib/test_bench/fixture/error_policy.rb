@@ -1,6 +1,14 @@
 module TestBench
   module Fixture
     module ErrorPolicy
+      def self.configure(receiver, policy: nil, attr_name: nil)
+        attr_name ||= :error_policy
+
+        instance = Build.(policy)
+        receiver.public_send(:"#{attr_name}=", instance)
+        instance
+      end
+
       module Build
         PolicyError = Class.new(RuntimeError)
 
