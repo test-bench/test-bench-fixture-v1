@@ -17,6 +17,16 @@ module TestBench
         Example = example_class
 
         module Exercise
+          def self.call(output=nil, &block)
+            output ||= Output.example
+
+            each_method do |method_name, args|
+              output.public_send(method_name, *args)
+
+              block.(method_name, args) unless block.nil?
+            end
+          end
+
           def self.each_method(&block)
             result = Controls::Result.example
             path = Controls::TestFile.path
