@@ -8,3 +8,5 @@ require 'test_bench/fixture/output/null'
 require 'test_bench/fixture/output/log'
 require 'test_bench/fixture/output/substitute'
 require 'test_bench/fixture/output/multiple'
+
+require 'test_bench/fixture/error_policy'
