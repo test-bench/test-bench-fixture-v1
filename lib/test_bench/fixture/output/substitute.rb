@@ -6,6 +6,8 @@ module TestBench
           Output.new
         end
 
+        MatchError = Class.new(RuntimeError)
+
         class Output
           include Fixture::Output
 
@@ -59,8 +61,38 @@ module TestBench
 
           def record(signal, *data)
             record = Record.new(signal, data)
-
             records << record
+            record
+          end
+
+          def one_record(signal=nil, &block)
+            matching_records = matching_records(signal, &block)
+
+            return if matching_records.empty?
+
+            unless matching_records.one?
+              raise MatchError, "More than one records match"
+            end
+
+            matching_records.shift
+          end
+
+          def matching_records(signal=nil, &block)
+            unless signal.nil?
+              inner_block = block || proc { true }
+
+              block = proc { |sig, *data|
+                if sig == signal
+                  inner_block.(*data)
+                else
+                  false
+                end
+              }
+            end
+
+            records.select do |record|
+              block.(record.signal, *record.data)
+            end
           end
 
           Record = Struct.new(:signal, :data)
