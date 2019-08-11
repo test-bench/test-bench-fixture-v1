@@ -89,6 +89,12 @@ module TestBench
             record
           end
 
+          def replay_records(output)
+            records.each do |record|
+              output.public_send(record.signal, *record.data)
+            end
+          end
+
           def recorded?(signal=nil, &block)
             matching_records(signal, &block).any?
           end
