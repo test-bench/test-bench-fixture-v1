@@ -89,6 +89,10 @@ module TestBench
             record
           end
 
+          def recorded?(signal=nil, &block)
+            matching_records(signal, &block).any?
+          end
+
           def one_record(signal=nil, &block)
             matching_records = matching_records(signal, &block)
 
