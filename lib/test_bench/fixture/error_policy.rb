@@ -17,6 +17,14 @@ module TestBench
         def call(error)
         end
       end
+
+      class RescueAssert
+        def call(error)
+          unless error.instance_of?(AssertionFailure)
+            raise error
+          end
+        end
+      end
     end
   end
 end
