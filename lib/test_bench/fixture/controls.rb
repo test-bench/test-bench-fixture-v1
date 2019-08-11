@@ -6,3 +6,5 @@ require 'test_bench/fixture/controls/error'
 require 'test_bench/fixture/controls/fixture'
 require 'test_bench/fixture/controls/result'
 require 'test_bench/fixture/controls/test_file'
+
+require 'test_bench/fixture/controls/output'
