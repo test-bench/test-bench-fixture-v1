@@ -10,3 +10,5 @@ require 'test_bench/fixture/output/substitute'
 require 'test_bench/fixture/output/multiple'
 
 require 'test_bench/fixture/error_policy'
+
+require 'test_bench/fixture/session'
