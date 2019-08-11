@@ -33,6 +33,14 @@ module TestBench
       def comment(text)
         output.comment(text)
       end
+
+      def error(error)
+        self.error_counter += 1
+
+        output.error(error)
+
+        error_policy.(error)
+      end
     end
   end
 end
