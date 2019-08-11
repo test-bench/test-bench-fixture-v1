@@ -7,3 +7,5 @@ require 'test_bench/fixture/output'
 require 'test_bench/fixture/output/null'
 require 'test_bench/fixture/output/log'
 require 'test_bench/fixture/output/substitute'
+
+require 'test_bench/fixture/error_policy'
