@@ -63,6 +63,10 @@ module TestBench
         result
       end
 
+      def comment(text)
+        output.comment(text)
+      end
+
       def record_failure
         self.failure_counter += 1
       end
