@@ -12,6 +12,11 @@ module TestBench
           raise error
         end
       end
+
+      class Rescue
+        def call(error)
+        end
+      end
     end
   end
 end
