@@ -1,6 +1,43 @@
 module TestBench
   module Fixture
     module ErrorPolicy
+      module Build
+        PolicyError = Class.new(RuntimeError)
+
+        def self.call(policy=nil)
+          cls = policy_class(policy)
+
+          cls.new
+        end
+
+        def self.policy_class(policy=nil)
+          policy ||= Defaults.policy
+
+          policies.fetch(policy) do
+            *policies, final_policy = self.policies.keys
+
+            policy_list = "#{policies.map(&:inspect).join(', ')} or #{final_policy.inspect}"
+
+            raise PolicyError, "Policy #{policy.inspect} is unknown. It must be one of: #{policy_list}"
+          end
+        end
+
+        def self.policies
+          {
+            :abort => Abort,
+            :raise => Raise,
+            :rescue => Rescue,
+            :rescue_assert => RescueAssert
+          }
+        end
+
+        module Defaults
+          def self.policy
+            :rescue_assert
+          end
+        end
+      end
+
       class Abort
         def call(error)
           abort "TestBench is aborting (#{self.class})"
