@@ -29,6 +29,10 @@ module TestBench
       def failed?
         error_counter.nonzero?
       end
+
+      def comment(text)
+        output.comment(text)
+      end
     end
   end
 end
