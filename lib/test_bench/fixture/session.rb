@@ -71,6 +71,23 @@ module TestBench
         output.detail(text)
       end
 
+      def assert(value, caller_location: nil)
+        caller_location ||= caller[0]
+
+        result = value ? true : false
+
+        self.assertion_counter += 1
+
+        output.assert(result, caller_location)
+
+        unless result
+          assertion_failure = AssertionFailure.build(caller_location)
+          raise assertion_failure
+        end
+
+        result
+      end
+
       def record_failure
         self.failure_counter += 1
       end
