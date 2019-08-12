@@ -109,6 +109,33 @@ module TestBench
         output.exit_file(path, result)
       end
 
+      def test(title=nil, &block)
+        if block.nil?
+          record_skip
+          output.skip_test(title)
+          return
+        end
+
+        output.start_test(title)
+
+        previous_failure_counter = self.failure_counter
+        previous_assertion_counter = self.assertion_counter
+
+        action = ->{
+          block.()
+
+          if failure_counter == previous_failure_counter
+            if assertion_counter == previous_assertion_counter
+              raise Error, "Test did not perform an assertion"
+            end
+          end
+        }
+
+        evaluate(action) do |result|
+          output.finish_test(title, result)
+        end
+      end
+
       def evaluate(action, &block)
         previous_failure_counter = self.failure_counter
 
