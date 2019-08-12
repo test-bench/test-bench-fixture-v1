@@ -104,6 +104,26 @@ module TestBench
         result
       end
 
+      def evaluate(action, &block)
+        previous_error_counter = self.error_counter
+
+        begin
+          action.()
+
+        rescue => error
+          error(error)
+
+          error = nil
+
+        ensure
+          result = error_counter == previous_error_counter
+
+          block.(result, error) unless block.nil?
+        end
+
+        result
+      end
+
       def fail!
         self.assertion_counter += 1
         self.error_counter += 1
