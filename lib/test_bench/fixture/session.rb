@@ -2,6 +2,7 @@ module TestBench
   module Fixture
     class Session
       Error = Class.new(RuntimeError)
+      Abort = Class.new(RuntimeError)
 
       def assertion_counter
         @assertion_counter ||= 0
@@ -33,6 +34,11 @@ module TestBench
       end
       attr_writer :finished
       alias_method :finished?, :finished
+
+      def error_policy
+        @error_policy ||= ErrorPolicy::RescueAssert.new
+      end
+      attr_writer :error_policy
 
       def output
         @output ||= Output::Substitute.build
@@ -83,6 +89,31 @@ module TestBench
         unless result
           assertion_failure = AssertionFailure.build(caller_location)
           raise assertion_failure
+        end
+
+        result
+      end
+
+      def evaluate(action, &block)
+        previous_failure_counter = self.failure_counter
+
+        begin
+          action.()
+
+        rescue Abort
+
+        rescue => error
+          record_failure
+
+          output.error(error)
+
+          error_policy.(error)
+          error = nil
+
+        ensure
+          result = failure_counter == previous_failure_counter
+
+          block.(result, error) unless block.nil?
         end
 
         result
