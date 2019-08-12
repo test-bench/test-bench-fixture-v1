@@ -45,6 +45,34 @@ module TestBench
       end
       attr_writer :output
 
+      def self.build(output: nil, error_policy: nil)
+        instance = new
+
+        if output.nil?
+          Output::Log.configure(instance)
+        else
+          instance.output = output
+        end
+
+        ErrorPolicy.configure(instance, policy: error_policy)
+
+        instance
+      end
+
+      def self.configure(receiver, session: nil, output: nil, error_policy: nil, attr_name: nil)
+        attr_name ||= :session
+
+        if session.nil?
+          instance = build(output: output, error_policy: error_policy)
+        else
+          instance = session
+        end
+
+        receiver.public_send(:"#{attr_name}=", instance)
+
+        instance
+      end
+
       def start
         if started
           raise Error, "Session has already been started"
