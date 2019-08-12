@@ -56,6 +56,32 @@ module TestBench
         result
       end
 
+      def assert_block(caller_location: nil, &block)
+        caller_location ||= caller_locations.first
+
+        previous_assertion_counter = self.assertion_counter
+
+        output.enter_assert_block
+
+        result = nil
+
+        evaluate(block) do |_result|
+          result = _result
+
+          if result && assertion_counter == previous_assertion_counter
+            result = false
+          end
+
+          output.exit_assert_block(result)
+
+          unless result == _result
+            assert(false, caller_location: caller_location)
+          end
+        end
+
+        assert(result, caller_location: caller_location)
+      end
+
       def evaluate(action, &block)
         previous_error_counter = self.error_counter
 
