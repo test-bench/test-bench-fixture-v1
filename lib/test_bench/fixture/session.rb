@@ -3,6 +3,11 @@ module TestBench
     class Session
       Error = Class.new(RuntimeError)
 
+      def assertion_counter
+        @assertion_counter ||= 0
+      end
+      attr_writer :assertion_counter
+
       def error_counter
         @error_counter ||= 0
       end
@@ -68,6 +73,25 @@ module TestBench
         output.error(error)
 
         error_policy.(error)
+      end
+
+      def assert(value, caller_location: nil)
+        caller_location ||= caller_locations.first
+
+        result = value ? true : false
+
+        self.assertion_counter += 1
+
+        output.assert(result, caller_location)
+
+        unless result
+          self.error_counter += 1
+
+          assertion_failure = AssertionFailure.build(caller_location)
+          raise assertion_failure
+        end
+
+        result
       end
 
       def fail!
