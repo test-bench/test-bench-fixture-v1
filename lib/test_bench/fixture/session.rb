@@ -123,6 +123,26 @@ module TestBench
         end
       end
 
+      def evaluate(action, &block)
+        previous_error_counter = self.error_counter
+
+        begin
+          action.()
+
+        rescue => error
+          error(error)
+
+        ensure
+          current_exception = $!
+
+          result = error_counter == previous_error_counter
+
+          block.(result, current_exception) unless block.nil?
+        end
+
+        result
+      end
+
       def fail!
         self.error_counter += 1
       end
