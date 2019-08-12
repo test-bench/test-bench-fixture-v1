@@ -34,6 +34,27 @@ module TestBench
       end
     end
 
+    def self.call(cls, *args, **kwargs, &block)
+      factory_method = factory_method(cls)
+
+      if factory_method.name == :new
+        last_parameter_type, _ = cls.instance_method(:initialize).parameters.last
+      else
+        last_parameter_type, _ = factory_method.parameters.last
+      end
+
+      if last_parameter_type == :block
+        instance = build(cls, *args, **kwargs, &block)
+        block = nil
+      else
+        instance = build(cls, *args, **kwargs)
+      end
+
+      instance.test_session.fixture(instance, &block)
+
+      instance
+    end
+
     def test_session
       @test_session ||= Session::Substitute.build
     end
