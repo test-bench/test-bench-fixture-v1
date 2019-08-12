@@ -19,6 +19,12 @@ module TestBench
               (caller_location.nil? || cl == caller_location)
             end
           end
+
+          def test?(title)
+            output.recorded?(:finish_test) do |t|
+              t == title
+            end
+          end
         end
       end
     end
