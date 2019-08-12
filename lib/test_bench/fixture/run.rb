@@ -21,6 +21,33 @@ module TestBench
       end
       attr_writer :output
 
+      def self.build(output: nil, error_policy: nil)
+        instance = new
+
+        if output.nil?
+          Output::Log.configure(instance)
+        else
+          instance.output = output
+        end
+
+        ErrorPolicy.configure(instance, policy: error_policy)
+        instance
+      end
+
+      def self.configure(receiver, run: nil, output: nil, error_policy: nil, attr_name: nil)
+        attr_name ||= :run
+
+        if run.nil?
+          instance = build(output: output, error_policy: error_policy)
+        else
+          instance = run
+        end
+
+        receiver.public_send(:"#{attr_name}=", instance)
+
+        instance
+      end
+
       def failed?
         error_counter.nonzero?
       end
