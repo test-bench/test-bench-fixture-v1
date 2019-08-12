@@ -85,6 +85,25 @@ module TestBench
         error_policy.(error)
       end
 
+      def assert(value, caller_location: nil)
+        caller_location ||= caller[0]
+
+        result = value ? true : false
+
+        self.assertion_counter += 1
+
+        output.assert(result, caller_location)
+
+        unless result
+          self.error_counter += 1
+
+          assertion_failure = AssertionFailure.build(caller_location)
+          raise assertion_failure
+        end
+
+        result
+      end
+
       def fail!
         self.assertion_counter += 1
         self.error_counter += 1
