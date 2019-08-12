@@ -126,6 +126,19 @@ module TestBench
         end
       end
 
+      def test(title=nil, &block)
+        if block.nil?
+          output.skip_test(title)
+          return
+        end
+
+        output.start_test(title)
+
+        evaluate(block) do |result|
+          output.finish_test(title, result)
+        end
+      end
+
       def evaluate(action, &block)
         previous_error_counter = self.error_counter
 
