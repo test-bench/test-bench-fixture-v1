@@ -47,6 +47,12 @@ module TestBench
               t == title
             end
           end
+
+          def context?(title)
+            output.recorded?(:exit_context) do |t|
+              t == title
+            end
+          end
         end
       end
     end
