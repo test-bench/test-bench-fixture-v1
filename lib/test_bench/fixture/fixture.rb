@@ -14,6 +14,18 @@ module TestBench
       instance
     end
 
+    def self.call(cls, *args, **kwargs, &block)
+      instance = build(cls, *args, **kwargs)
+
+      if block.nil?
+        instance.()
+      else
+        instance.instance_exec(instance, &block)
+      end
+
+      instance
+    end
+
     def test_run
       @test_run ||= Run::Substitute.build
     end

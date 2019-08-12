@@ -14,6 +14,21 @@ module TestBench
           end
         end
 
+        module InstanceActuator
+          def self.example
+            Example.new
+          end
+
+          Example = Fixture.example_class do
+            attr_accessor :actuated
+            alias_method :actuated?, :actuated
+
+            def call
+              self.actuated = true
+            end
+          end
+        end
+
         module FactoryMethod
           def self.example
             Example.build
