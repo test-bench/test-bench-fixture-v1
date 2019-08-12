@@ -31,6 +31,10 @@ module TestBench
               t == title
             end
           end
+
+          def match_tests(*titles, result: nil)
+            MatchTests.(self, *titles, result: result)
+          end
         end
       end
     end
