@@ -11,11 +11,6 @@ module TestBench
       end
       attr_writer :error_counter
 
-      def depth
-        @depth ||= 0
-      end
-      attr_writer :depth
-
       def error_policy
         @error_policy ||= ErrorPolicy::Build.(:rescue_assert)
       end
@@ -56,6 +51,24 @@ module TestBench
 
           assertion_failure = AssertionFailure.build(caller_location)
           raise assertion_failure
+        end
+
+        result
+      end
+
+      def evaluate(action, &block)
+        previous_error_counter = self.error_counter
+
+        begin
+          action.()
+
+        rescue => error
+          error(error)
+
+        ensure
+          result = error_counter == previous_error_counter
+
+          block.(result) unless block.nil?
         end
 
         result
