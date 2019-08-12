@@ -41,6 +41,12 @@ module TestBench
               p == path
             end
           end
+
+          def test?(title)
+            output.recorded?(:finish_test) do |t|
+              t == title
+            end
+          end
         end
       end
     end
