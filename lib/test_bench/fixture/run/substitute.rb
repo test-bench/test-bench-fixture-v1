@@ -12,6 +12,13 @@ module TestBench
               t == text
             end
           end
+
+          def asserted?(result=nil, caller_location: nil)
+            output.recorded?(:assert) do |r, cl|
+              (result.nil? || r == result) &&
+              (caller_location.nil? || cl == caller_location)
+            end
+          end
         end
       end
     end
