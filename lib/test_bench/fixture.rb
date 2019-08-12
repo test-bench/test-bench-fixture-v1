@@ -12,3 +12,5 @@ require 'test_bench/fixture/error_policy'
 require 'test_bench/fixture/run'
 require 'test_bench/fixture/run/substitute'
 require 'test_bench/fixture/run/substitute/match_tests'
+
+require 'test_bench/fixture/fixture'
