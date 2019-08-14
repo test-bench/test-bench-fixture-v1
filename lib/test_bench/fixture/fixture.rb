@@ -36,5 +36,20 @@ module TestBench
     def comment(text)
       test_run.comment(text)
     end
+
+    ArgumentOmitted = Object.new
+    def assert(value=ArgumentOmitted, caller_location: nil, &block)
+      caller_location ||= caller_locations.first
+
+      unless value == ArgumentOmitted
+        unless block.nil?
+          raise ArgumentError, "Must supply a boolean value or a block (but not both)"
+        end
+
+        test_run.assert(value, caller_location: caller_location)
+      else
+        test_run.assert_block(caller_location: caller_location, &block)
+      end
+    end
   end
 end
