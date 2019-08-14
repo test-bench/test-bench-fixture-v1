@@ -73,5 +73,13 @@ module TestBench
         self.test_session = original_test_session
       end
     end
+
+    def comment(text, *additional_lines)
+      test_session.comment(text)
+
+      additional_lines.each do |text|
+        test_session.comment(text)
+      end
+    end
   end
 end
