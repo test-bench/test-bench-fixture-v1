@@ -51,5 +51,11 @@ module TestBench
         test_run.assert_block(caller_location: caller_location, &block)
       end
     end
+
+    def refute(value, caller_location: nil)
+      caller_location ||= caller_locations.first
+
+      test_run.assert(!value, caller_location: caller_location)
+    end
   end
 end
