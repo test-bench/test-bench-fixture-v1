@@ -120,5 +120,9 @@ module TestBench
     def context(text=nil, &block)
       test_run.context(text, &block)
     end
+
+    def test(text=nil, &block)
+      test_run.test(text, &block)
+    end
   end
 end
