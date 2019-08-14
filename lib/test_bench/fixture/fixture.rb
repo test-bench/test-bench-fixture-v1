@@ -32,5 +32,9 @@ module TestBench
     attr_writer :test_run
     alias_method :run, :test_run
     alias_method :run=, :test_run=
+
+    def comment(text)
+      test_run.comment(text)
+    end
   end
 end
