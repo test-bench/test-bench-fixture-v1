@@ -124,5 +124,9 @@ module TestBench
     def test(text=nil, &block)
       test_run.test(text, &block)
     end
+
+    def fixture(cls, *args, **kwargs, &block)
+      Fixture.(cls, *args, run: test_run, **kwargs, &block)
+    end
   end
 end
