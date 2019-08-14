@@ -121,5 +121,39 @@ module TestBench
 
       assert(result, caller_location: caller_location)
     end
+
+    def refute_raises(error_class=nil, strict: nil, caller_location: nil, &block)
+      if error_class.nil?
+        strict ||= false
+        error_class = StandardError
+      else
+        strict = true if strict.nil?
+      end
+
+      caller_location ||= caller[0]
+
+      detail "Prohibited Error: #{error_class}#{' (strict)' if strict}"
+
+      block.()
+
+      detail "(No error was raised)"
+
+      result = true
+
+    rescue error_class => error
+
+      detail "Raised Error: #{error.inspect}"
+
+      if strict && !error.instance_of?(error_class)
+        raise error
+      end
+
+      result = false
+
+    ensure
+      unless result.nil?
+        assert(result, caller_location: caller_location)
+      end
+    end
   end
 end
