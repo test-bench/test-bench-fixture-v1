@@ -155,5 +155,9 @@ module TestBench
         assert(result, caller_location: caller_location)
       end
     end
+
+    def context(text=nil, &block)
+      test_session.context(text, &block)
+    end
   end
 end
