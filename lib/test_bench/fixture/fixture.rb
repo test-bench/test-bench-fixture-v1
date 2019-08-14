@@ -155,5 +155,9 @@ module TestBench
     def test(text=nil, &block)
       test_session.test(text, &block)
     end
+
+    def fixture(cls, *args, **kwargs, &block)
+      Fixture.(cls, *args, session: test_session, **kwargs, &block)
+    end
   end
 end
