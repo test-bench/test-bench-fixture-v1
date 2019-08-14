@@ -71,5 +71,11 @@ module TestBench
 
       test_session.assert(value, caller_location: caller_location)
     end
+
+    def refute(value, caller_location: nil)
+      caller_location ||= caller[0]
+
+      test_session.assert(!value, caller_location: caller_location)
+    end
   end
 end
