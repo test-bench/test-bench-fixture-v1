@@ -176,5 +176,19 @@ module TestBench
     def context(text=nil, &block)
       test_session.context(text, &block)
     end
+
+    def test(text=nil, &block)
+      test_session.test(text, &block)
+    end
+
+    def test!(text=nil, &block)
+      result = test(text, &block)
+
+      unless result
+        raise Session::Abort.new, "Context aborted"
+      end
+
+      result
+    end
   end
 end
