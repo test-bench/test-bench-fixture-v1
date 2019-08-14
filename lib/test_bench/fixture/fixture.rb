@@ -163,5 +163,9 @@ module TestBench
     def context(text=nil, &block)
       test_session.context(text, &block)
     end
+
+    def test(text=nil, &block)
+      test_session.test(text, &block)
+    end
   end
 end
