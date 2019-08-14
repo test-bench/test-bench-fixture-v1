@@ -73,5 +73,11 @@ module TestBench
         test_session.detail(text)
       end
     end
+
+    def assert(value, caller_location: nil)
+      caller_location ||= caller[0]
+
+      test_session.assert(value, caller_location: caller_location)
+    end
   end
 end
