@@ -61,5 +61,13 @@ module TestBench
     attr_writer :test_session
     alias_method :session, :test_session
     alias_method :session=, :test_session=
+
+    def comment(text, *additional_lines)
+      test_session.comment(text)
+
+      additional_lines.each do |text|
+        test_session.comment(text)
+      end
+    end
   end
 end
