@@ -85,5 +85,41 @@ module TestBench
 
       test_session.assert(!value, caller_location: caller_location)
     end
+
+    def assert_raises(error_class=nil, message=nil, strict: nil, caller_location: nil, &block)
+      if error_class.nil?
+        strict ||= false
+        error_class = StandardError
+      else
+        strict = true if strict.nil?
+      end
+
+      caller_location ||= caller[0]
+
+      detail "Expected Error: #{error_class}#{' (strict)' if strict}"
+      detail "Expected Message: #{message.inspect}" unless message.nil?
+
+      block.()
+
+      detail "(No error was raised)"
+
+      assert(false, caller_location: caller_location)
+
+    rescue error_class => error
+
+      detail "Raised error: #{error.inspect}#{" (subclass of #{error_class})" if error.class < error_class}"
+
+      if strict && !error.instance_of?(error_class)
+        raise error
+      end
+
+      if message.nil?
+        result = true
+      else
+        result = error.message == message
+      end
+
+      assert(result, caller_location: caller_location)
+    end
   end
 end
