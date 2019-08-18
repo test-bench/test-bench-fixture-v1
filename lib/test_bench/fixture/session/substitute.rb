@@ -60,6 +60,10 @@ module TestBench
             end
           end
 
+          def pass(*titles)
+            passes(*titles).first
+          end
+
           def passes(*titles)
             match_tests(*titles, result: true)
           end
