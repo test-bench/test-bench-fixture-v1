@@ -7,6 +7,8 @@ module TestBench
         end
 
         class Run < Run
+          Error = Class.new(RuntimeError)
+
           def commented?(text)
             output.recorded?(:comment) do |t|
               t == text
@@ -30,6 +32,16 @@ module TestBench
             output.recorded?(:exit_context) do |t|
               t == title
             end
+          end
+
+          def one_pass(*titles)
+            passes = passes(*titles)
+
+            if passes.count > 1
+              raise Error, "Multiple passing tests match (Titles: #{titles.inspect})"
+            end
+
+            passes.first
           end
 
           def pass(*titles)
