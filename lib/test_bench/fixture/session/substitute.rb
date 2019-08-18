@@ -7,6 +7,8 @@ module TestBench
         end
 
         class Session < Session
+          Error = Class.new(RuntimeError)
+
           attr_accessor :load_failure
 
           def commented?(text)
@@ -58,6 +60,16 @@ module TestBench
             output.recorded?(:finish_fixture) do |f|
               f == fixture
             end
+          end
+
+          def one_pass(*titles)
+            passes = passes(*titles)
+
+            if passes.count > 1
+              raise Error, "Multiple passing tests match (Titles: #{titles.inspect})"
+            end
+
+            passes.first
           end
 
           def pass(*titles)
