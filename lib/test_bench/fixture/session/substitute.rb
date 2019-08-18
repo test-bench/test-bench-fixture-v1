@@ -80,6 +80,16 @@ module TestBench
             match_tests(*titles, result: true)
           end
 
+          def one_failure(*titles)
+            failures = failures(*titles)
+
+            if failures.count > 1
+              raise Error, "Multiple failing tests match (Titles: #{titles.inspect})"
+            end
+
+            failures.first
+          end
+
           def failure(*titles)
             failures(*titles).first
           end
