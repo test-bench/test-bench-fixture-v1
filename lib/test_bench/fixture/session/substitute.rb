@@ -60,6 +60,10 @@ module TestBench
             end
           end
 
+          def passes(*titles)
+            match_tests(*titles, result: true)
+          end
+
           def match_tests(*titles, result: nil)
             MatchTests.(self, *titles, result: result)
           end
