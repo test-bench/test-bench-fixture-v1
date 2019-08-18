@@ -40,6 +40,10 @@ module TestBench
             match_tests(*titles, result: true)
           end
 
+          def failure(*titles)
+            failures(*titles).first
+          end
+
           def failures(*titles)
             match_tests(*titles, result: false)
           end
