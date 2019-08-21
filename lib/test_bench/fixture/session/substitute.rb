@@ -66,6 +66,12 @@ module TestBench
             !pass(*titles).nil?
           end
 
+          def failed?(*titles)
+            return super if titles.empty?
+
+            !failure(*titles).nil?
+          end
+
           def one_pass(*titles)
             passes = passes(*titles)
 
