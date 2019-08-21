@@ -66,6 +66,10 @@ module TestBench
             !pass(*titles).nil?
           end
 
+          def test_failed?(*titles)
+            !failure(*titles).nil?
+          end
+
           def one_pass(*titles)
             passes = passes(*titles)
 
