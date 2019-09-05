@@ -80,6 +80,10 @@ module TestBench
             passes.first
           end
 
+          def one_passed?(*titles)
+            one_pass(*titles) ? true : false
+          end
+
           def pass(*titles)
             passes(*titles).first
           end
