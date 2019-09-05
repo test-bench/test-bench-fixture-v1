@@ -76,6 +76,10 @@ module TestBench
             failures.first
           end
 
+          def one_failed?(*titles)
+            one_failure(*titles) ? true : false
+          end
+
           def failure(*titles)
             failures(*titles).first
           end
