@@ -1,6 +1,8 @@
 module TestBench
   module Fixture
     class Session
+      Error = Class.new(RuntimeError)
+
       def assertion_counter
         @assertion_counter ||= 0
       end
@@ -10,6 +12,29 @@ module TestBench
         @error_counter ||= 0
       end
       attr_writer :error_counter
+
+      def started
+        instance_variable_defined?(:@started) ?
+          @started :
+          @started = false
+      end
+      attr_writer :started
+      alias_method :started?, :started
+
+      def output
+        @output ||= Output::Substitute.build
+      end
+      attr_writer :output
+
+      def start
+        if started
+          raise Error, "Session has already been started"
+        end
+
+        self.started = true
+
+        output.start
+      end
 
       def fail!
         self.assertion_counter += 1
