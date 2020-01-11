@@ -26,6 +26,14 @@ module TestBench
       attr_writer :started
       alias_method :started?, :started
 
+      def finished
+        instance_variable_defined?(:@finished) ?
+          @finished :
+          @finished = false
+      end
+      attr_writer :finished
+      alias_method :finished?, :finished
+
       def output
         @output ||= Output::Substitute.build
       end
@@ -39,6 +47,20 @@ module TestBench
         self.started = true
 
         output.start
+      end
+
+      def finish
+        if finished
+          raise Error, "Session has already finished"
+        end
+
+        self.finished = true
+
+        result = !failed?
+
+        output.finish(result)
+
+        result
       end
 
       def record_failure
