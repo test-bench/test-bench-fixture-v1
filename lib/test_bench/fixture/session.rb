@@ -94,6 +94,21 @@ module TestBench
         result
       end
 
+      def load(path)
+        output.enter_file(path)
+
+        result = false
+
+        source = File.read(path)
+        TOPLEVEL_BINDING.eval(source, path)
+
+        result = true
+
+      ensure
+
+        output.exit_file(path, result)
+      end
+
       def evaluate(action, &block)
         previous_failure_counter = self.failure_counter
 
