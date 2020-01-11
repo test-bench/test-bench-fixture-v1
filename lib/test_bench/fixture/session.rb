@@ -104,6 +104,18 @@ module TestBench
         result
       end
 
+      def load(path)
+        output.enter_file(path)
+
+        action = proc { Kernel.load(path) }
+
+        result = evaluate(action)
+
+        output.exit_file(path, result)
+
+        result
+      end
+
       def evaluate(action, &block)
         previous_error_counter = self.error_counter
 
