@@ -161,6 +161,31 @@ module TestBench
         end
       end
 
+      def fixture(fixture, &block)
+        if block.nil? && !fixture.respond_to?(:call)
+          raise Error, "Block must be given when a fixture does not respond to #call"
+        end
+
+        actions = []
+
+        if fixture.respond_to?(:call)
+          actions << fixture
+        end
+
+        unless block.nil?
+          actions << proc { block.(fixture) }
+        end
+
+        output.start_fixture(fixture)
+
+        action = proc { actions.each(&:call) }
+        result = evaluate(action)
+
+        output.finish_fixture(fixture, result)
+
+        result
+      end
+
       def evaluate(action, &block)
         previous_error_counter = self.error_counter
 
