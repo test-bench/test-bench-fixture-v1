@@ -53,6 +53,12 @@ module TestBench
               t == title
             end
           end
+
+          def fixture?(fixture)
+            output.recorded?(:finish_fixture) do |f|
+              f == fixture
+            end
+          end
         end
       end
     end
