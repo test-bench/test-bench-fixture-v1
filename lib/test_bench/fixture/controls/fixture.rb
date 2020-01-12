@@ -37,6 +37,23 @@ module TestBench
           end
         end
 
+        module FactoryMethod
+          def self.example
+            Example.build
+          end
+
+          Example = Fixture.example_class do
+            attr_accessor :build_method_called
+            alias_method :build_method_called?, :build_method_called
+
+            def self.build
+              instance = new
+              instance.build_method_called = true
+              instance
+            end
+          end
+        end
+
         Example = InstanceActuator::Example
       end
     end
