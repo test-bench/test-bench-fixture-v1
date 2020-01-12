@@ -7,6 +7,8 @@ module TestBench
         end
 
         class Session < Session
+          attr_accessor :load_failure
+
           def commented?(text)
             output.recorded?(:comment) do |t|
               t == text
@@ -17,6 +19,26 @@ module TestBench
             output.recorded?(:assert) do |r, cl|
               (result.nil? || r == result) &&
               (caller_location.nil? || cl == caller_location)
+            end
+          end
+
+          def load_failure!
+            self.load_failure = true
+          end
+
+          def load(path)
+            result = load_failure ? false : true
+
+            output.enter_file(path)
+
+            output.exit_file(path, result)
+
+            result
+          end
+
+          def loaded?(path)
+            output.recorded?(:exit_file) do |p|
+              p == path
             end
           end
         end
