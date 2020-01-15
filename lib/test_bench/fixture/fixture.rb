@@ -57,5 +57,115 @@ module TestBench
     attr_writer :test_session
     alias_method :session, :test_session
     alias_method :session=, :test_session=
+
+    def comment(text, *additional_lines)
+      test_session.comment(text)
+
+      additional_lines.each do |text|
+        test_session.comment(text)
+      end
+    end
+
+    def detail(text, *additional_lines)
+      test_session.detail(text)
+
+      additional_lines.each do |text|
+        test_session.detail(text)
+      end
+    end
+
+    def assert(value, caller_location: nil)
+      caller_location ||= caller[0]
+
+      test_session.assert(value, caller_location: caller_location)
+    end
+
+    def refute(value, caller_location: nil)
+      caller_location ||= caller[0]
+
+      test_session.assert(!value, caller_location: caller_location)
+    end
+
+    def assert_raises(error_class=nil, message=nil, strict: nil, caller_location: nil, &block)
+      if error_class.nil?
+        strict ||= false
+        error_class = StandardError
+      else
+        strict = true if strict.nil?
+      end
+
+      caller_location ||= caller[0]
+
+      detail "Expected Error: #{error_class}#{' (strict)' if strict}"
+      detail "Expected Message: #{message.inspect}" unless message.nil?
+
+      block.()
+
+      detail "(No error was raised)"
+
+      assert(false, caller_location: caller_location)
+
+    rescue error_class => error
+
+      detail "Raised error: #{error.inspect}#{" (subclass of #{error_class})" if error.class < error_class}"
+
+      if strict && !error.instance_of?(error_class)
+        raise error
+      end
+
+      if message.nil?
+        result = true
+      else
+        result = error.message == message
+      end
+
+      assert(result, caller_location: caller_location)
+    end
+
+    def refute_raises(error_class=nil, strict: nil, caller_location: nil, &block)
+      if error_class.nil?
+        strict ||= false
+        error_class = StandardError
+      else
+        strict = true if strict.nil?
+      end
+
+      caller_location ||= caller[0]
+
+      detail "Prohibited Error: #{error_class}#{' (strict)' if strict}"
+
+      block.()
+
+      detail "(No error was raised)"
+
+      result = true
+
+    rescue error_class => error
+
+      detail "Raised Error: #{error.inspect}"
+
+      if strict && !error.instance_of?(error_class)
+        raise error
+      end
+
+      result = false
+
+    ensure
+      unless result.nil?
+        assert(result, caller_location: caller_location)
+      end
+    end
+
+    def context(text=nil, &block)
+      test_session.context(text, &block)
+    end
+
+    def test(text=nil, &block)
+      test_session.test(text, &block)
+    end
+
+    def fixture(cls, *args, **kwargs, &block)
+      Fixture.(cls, *args, session: test_session, **kwargs, &block)
+    end
   end
 end
