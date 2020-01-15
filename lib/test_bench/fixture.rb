@@ -15,3 +15,5 @@ require 'test_bench/fixture/error_policy'
 
 require 'test_bench/fixture/session'
 require 'test_bench/fixture/session/substitute'
+
+require 'test_bench/fixture/fixture'
