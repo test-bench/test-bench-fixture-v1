@@ -27,6 +27,23 @@ module TestBench
               result_match && caller_location_match
             end
           end
+
+          def load(path)
+            output.enter_file(path)
+
+            inert_action = proc { }
+            result = evaluate(inert_action)
+
+            output.exit_file(path, result)
+
+            result
+          end
+
+          def loaded?(path=nil)
+            output.enter_file_recorded? do |p|
+              path.nil? || p == path
+            end
+          end
         end
       end
     end
