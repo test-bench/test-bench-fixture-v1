@@ -12,6 +12,12 @@ module TestBench
               t == text
             end
           end
+
+          def detail?(*contexts, text)
+            output.detail_recorded?(*contexts) do |t|
+              t == text
+            end
+          end
         end
       end
     end
