@@ -7,6 +7,17 @@ module TestBench
         end
 
         class Session < Session
+          def scope(*contexts)
+            scoped_output = output.scope(*contexts)
+
+            return nil if scoped_output.records.empty?
+
+            scoped_session = self.class.new
+            scoped_session.output = scoped_output
+            scoped_session
+          end
+          alias_method :[], :scope
+
           def context?(*outer_contexts, title)
             output.exit_context_recorded_once?(*outer_contexts) do |t|
               t == title
