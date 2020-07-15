@@ -90,6 +90,12 @@ module TestBench
             end
           end
 
+          def fixture?(fixture)
+            output.finish_fixture_recorded? do |f|
+              f == fixture
+            end
+          end
+
           def test_scope(*contexts, title)
             context_scope = output.scope(*contexts)
 
