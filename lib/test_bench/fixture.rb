@@ -14,3 +14,6 @@ require 'test_bench/fixture/output/substitute/scope'
 require 'test_bench/fixture/output/multiple'
 
 require 'test_bench/fixture/error_policy'
+
+require 'test_bench/fixture/session'
+require 'test_bench/fixture/session/substitute'
