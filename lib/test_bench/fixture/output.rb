@@ -1,6 +1,10 @@
 module TestBench
   module Fixture
     module Output
+      def self.signals
+        instance_methods(false)
+      end
+
       def start
       end
 
