@@ -11,6 +11,12 @@ module TestBench
         class Output < Capture
           alias_method :raw_records, :records
 
+          def scope(*contexts, &block)
+            records = records(*contexts, &block)
+
+            Scope.build(records)
+          end
+
           def recorded_once?(*contexts, &block)
             record = one_record(*contexts, &block)
 
