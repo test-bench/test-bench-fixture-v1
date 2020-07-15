@@ -61,5 +61,9 @@ module TestBench
     def comment(text)
       test_session.comment(text)
     end
+
+    def detail(text)
+      test_session.detail(text)
+    end
   end
 end
