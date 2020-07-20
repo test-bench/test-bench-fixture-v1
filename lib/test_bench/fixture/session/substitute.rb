@@ -7,6 +7,12 @@ module TestBench
         end
 
         class Session < Session
+          def context?(*outer_contexts, title)
+            output.exit_context_recorded_once?(*outer_contexts) do |t|
+              t == title
+            end
+          end
+
           def one_test_passed?(*contexts, title)
             one_test?(*contexts, title) do |_, result|
               result == true
