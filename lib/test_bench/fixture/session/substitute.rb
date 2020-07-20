@@ -44,6 +44,20 @@ module TestBench
               path.nil? || p == path
             end
           end
+
+          def test_scope(*contexts, title)
+            context_scope = output.scope(*contexts)
+
+            titled_test_scope = context_scope.scope do |signal, t|
+              signal == :finish_test && t == title
+            end
+
+            untitled_test_scope = context_scope.scope(title) do |signal, t|
+              signal == :finish_test && t.nil?
+            end
+
+            titled_test_scope + untitled_test_scope
+          end
         end
       end
     end
