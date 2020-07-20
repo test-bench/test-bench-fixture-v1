@@ -7,6 +7,24 @@ module TestBench
         end
 
         class Session < Session
+          def one_test_passed?(*contexts, title)
+            one_test?(*contexts, title) do |_, result|
+              result == true
+            end
+          end
+
+          def one_test_failed?(*contexts, title)
+            one_test?(*contexts, title) do |_, result|
+              result == false
+            end
+          end
+
+          def one_test?(*contexts, title, &block)
+            test_scope = test_scope(*contexts, title)
+
+            test_scope.finish_test_recorded_once?(&block)
+          end
+
           def any_test_passed?(*contexts, title)
             any_test?(*contexts, title) do |_, result|
               result == true
