@@ -30,18 +30,21 @@ module TestBench
               result == true
             end
           end
+          alias_method :test_passed?, :any_test_passed?
 
           def any_test_failed?(*contexts, title)
             any_test?(*contexts, title) do |_, result|
               result == false
             end
           end
+          alias_method :test_failed?, :any_test_failed?
 
           def any_test?(*contexts, title, &block)
             test_scope = test_scope(*contexts, title)
 
             test_scope.finish_test_recorded?(&block)
           end
+          alias_method :test?, :any_test?
 
           def commented?(*contexts, text)
             output.comment_recorded?(*contexts) do |t|
