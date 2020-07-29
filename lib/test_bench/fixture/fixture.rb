@@ -114,7 +114,7 @@ module TestBench
       assert(result, caller_location: caller_location)
     end
 
-    def refute_raises(error_class=nil, strict: nil, caller_location: nil, &block)
+    def refute_raises(error_class=nil, message=nil, strict: nil, caller_location: nil, &block)
       if error_class.nil?
         strict ||= false
         error_class = StandardError
@@ -140,7 +140,11 @@ module TestBench
         raise error
       end
 
-      result = false
+      if message.nil?
+        result = false
+      else
+        result = error.message != message
+      end
 
     ensure
       unless result.nil?
