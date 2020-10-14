@@ -1,3 +1,7 @@
+require 'rubygems'
+require 'active_support'
+require 'active_support/core_ext/string/inflections'
+
 unless RUBY_ENGINE == 'mruby'
   require 'logger'
   require 'stringio'

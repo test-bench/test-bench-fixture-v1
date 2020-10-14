@@ -170,6 +170,8 @@ module TestBench
       end
 
       def context(title=nil, &block)
+        title = title.titlecase if title
+
         if block.nil?
           output.skip_context(title)
           return

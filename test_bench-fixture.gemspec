@@ -13,5 +13,8 @@ Gem::Specification.new do |s|
   s.require_paths = %w(lib)
   s.files = Dir.glob 'lib/**/*'
 
+  s.add_dependency 'activesupport'
+  s.add_dependency 'concurrent-ruby'
+
   s.add_development_dependency 'test_bench-bootstrap'
 end
