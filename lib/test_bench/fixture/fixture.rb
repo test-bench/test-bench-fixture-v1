@@ -40,5 +40,17 @@ module TestBench
     attr_writer :test_session
     alias_method :session, :test_session
     alias_method :session=, :test_session=
+
+    def inspect
+      original_test_session = test_session
+
+      self.test_session = "(not inspected; class is #{original_test_session.class})"
+
+      begin
+        super
+      ensure
+        self.test_session = original_test_session
+      end
+    end
   end
 end
